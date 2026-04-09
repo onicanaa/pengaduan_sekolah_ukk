@@ -1,0 +1,37 @@
+-- 1. Membuat Tabel Siswa (dibuat lebih dulu karena akan direferensikan)
+CREATE TABLE siswa (
+    nisn CHAR(10) PRIMARY KEY,
+    nama_siswa VARCHAR(100) NOT NULL,
+    kelas VARCHAR(20),
+    alamat TEXT
+);
+
+-- 2. Membuat Tabel Admin
+CREATE TABLE admin (
+    id_admin INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nama_lengkap VARCHAR(100)
+);
+
+-- 3. Membuat Tabel Laporan (dengan Foreign Key ke Siswa)
+CREATE TABLE laporan (
+    id_laporan INT AUTO_INCREMENT PRIMARY KEY,
+    tgl_laporan DATE NOT NULL,
+    nisn CHAR(10),
+    isi_laporan TEXT,
+    status ENUM('proses', 'selesai') DEFAULT 'proses',
+    CONSTRAINT fk_siswa_laporan FOREIGN KEY (nisn) REFERENCES siswa(nisn) ON DELETE CASCADE
+);
+
+---
+
+-- ISI DATA PASSWORD ADMIN --
+
+-- Opsi 1: Mengisi dengan enkripsi MD5 (Umum digunakan di pembelajaran)
+INSERT INTO admin (username, password, nama_lengkap) 
+VALUES ('admin', MD5('admin123'), 'Administrator Utama');
+
+-- Opsi 2: Mengisi dengan teks biasa (Tidak disarankan untuk aplikasi asli)
+-- INSERT INTO admin (username, password, nama_lengkap) 
+-- VALUES ('admin_web', 'passwordrahasia', 'Operator Laporan');
